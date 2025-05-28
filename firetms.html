@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>fireTMS MVP</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 2em auto; }
+    input, button { margin: 5px; padding: 8px; font-size: 1em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ccc; }
+    .lang-btn { float: right; }
+  </style>
+</head>
+<body>
+  <h1 id="title">Zlecenia Transportowe</h1>
+  <button class="lang-btn" onclick="toggleLang()">🌍 English</button>
+  <form onsubmit="addOrder(event)">
+    <input type="text" id="client" placeholder="Klient" required />
+    <input type="text" id="origin" placeholder="Załadunek" required />
+    <input type="text" id="destination" placeholder="Rozładunek" required />
+    <input type="number" id="price" placeholder="Cena (PLN)" required />
+    <button type="submit">Zapisz</button>
+  </form>
+
+  <table id="ordersTable">
+    <thead>
+      <tr>
+        <th>Klient</th>
+        <th>Załadunek</th>
+        <th>Rozładunek</th>
+        <th>Cena</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    let lang = 'pl';
+    const labels = {
+      pl: {
+        title: "Zlecenia Transportowe",
+        client: "Klient", origin: "Załadunek", destination: "Rozładunek", price: "Cena (PLN)",
+        save: "Zapisz", toggle: "🌍 English"
+      },
+      en: {
+        title: "Transport Orders",
+        client: "Client", origin: "Origin", destination: "Destination", price: "Price (EUR)",
+        save: "Submit", toggle: "🌍 Polski"
+      }
+    };
+
+    function toggleLang() {
+      lang = lang === 'pl' ? 'en' : 'pl';
+      const l = labels[lang];
+      document.getElementById('title').textContent = l.title;
+      document.getElementById('client').placeholder = l.client;
+      document.getElementById('origin').placeholder = l.origin;
+      document.getElementById('destination').placeholder = l.destination;
+      document.getElementById('price').placeholder = l.price;
+      document.querySelector('button[type="submit"]').textContent = l.save;
+      document.querySelector('.lang-btn').textContent = l.toggle;
+      const headers = document.querySelectorAll('th');
+      headers[0].textContent = l.client;
+      headers[1].textContent = l.origin;
+      headers[2].textContent = l.destination;
+      headers[3].textContent = l.price;
+    }
+
+    function addOrder(e) {
+      e.preventDefault();
+      const client = document.getElementById('client').value;
+      const origin = document.getElementById('origin').value;
+      const destination = document.getElementById('destination').value;
+      const price = document.getElementById('price').value;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${client}</td><td>${origin}</td><td>${destination}</td><td>${price}</td>`;
+      document.querySelector('#ordersTable tbody').appendChild(row);
+
+      document.getElementById('client').value = '';
+      document.getElementById('origin').value = '';
+      document.getElementById('destination').value = '';
+      document.getElementById('price').value = '';
+    }
+
+    toggleLang(); // initialize with default language
+  </script>
+</body>
+</html>
